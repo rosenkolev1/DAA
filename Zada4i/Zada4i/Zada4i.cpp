@@ -460,17 +460,70 @@ std::vector<T> sortTheStudents(std::vector<T>& score, int k) {
     return score;
 }
 
+void evil()
+{
+    int n, m;
+    scanf("%d %d\n", &n, &m);
+
+    std::vector<std::pair<int, int>> lepenki;
+    lepenki.resize(m);
+
+    for (unsigned i = 0; i < m; i++)
+    {
+        int start, end;
+        scanf("%d %d", &start, &end);
+        lepenki[i].first = start;
+        lepenki[i].second = end;
+    }
+
+    quickSortRight<std::pair<int, int>>(lepenki,
+        [](std::pair<int, int>& left, std::pair<int, int>& right) {
+            return left.first < right.first;
+        }
+    );
+
+    int curStart = lepenki[0].first,
+        curEnd = lepenki[0].second;
+
+    int totalCovered = 0;
+
+    for (int i = 1; i < m; i++)
+    {
+        int nextStart = lepenki[i].first,
+            nextEnd = lepenki[i].second;
+
+        if (nextStart > curEnd)
+        {
+            totalCovered += curEnd - curStart + 1;
+            curStart = nextStart;
+            curEnd = nextEnd;
+        }
+        else
+        {
+            curEnd = std::max(nextEnd, curEnd);
+        }
+    }
+
+    totalCovered += curEnd - curStart + 1;
+
+    printf("%lld", totalCovered);
+}
+/*
+114, 120, 334, 402, 564, 578, 720, 758, 1112, 1424, 1427, 1436, 1534, 1538, 1604, 1702, 1792
+2, 216, 244, 464, 644, 678, 892, 1104, 1134, 1150, 1156, 1178, 1392, 1608, 1670, 1799, 1828
+*/
+
 int main()
 {
     //bazinga();
-    auto kur = std::vector<std::vector<int>>{ {10, 6, 9, 1}, {7, 5, 11, 2}, {4, 8, 3, 15} };
+    /*auto kur = std::vector<std::vector<int>>{ {10, 6, 9, 1}, {7, 5, 11, 2}, {4, 8, 3, 15} };
     quickSortRight<std::vector<int>>(kur, [](std::vector<int>& left, std::vector<int>& right) {
         return left[2] > right[2];
     });
 
-    printMatrix(kur);
+    printMatrix(kur);*/
 
-
+    evil();
 
     return 0;
 }
